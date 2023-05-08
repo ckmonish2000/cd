@@ -1,11 +1,11 @@
-import {Router,Request,Response} from "express"
-import { createUserInputType, createUserSchema } from "@schemas/user.schema"
+import {Router} from "express"
+import {createUserSchema } from "@schemas/user.schema"
 import validateResource from "@middleware/validateResource"
+import { createUserHandler } from "@controllers/user.controller"
 
 const router = Router()
 
-router.post("/api/users",validateResource(createUserSchema),(req:Request<unknown,unknown,createUserInputType>,res:Response)=>{
-	res.send(req.body)
-})
+router.post("/api/users",validateResource(createUserSchema),createUserHandler)
+
 
 export default router
