@@ -7,9 +7,10 @@ function setupEnvironment() {
 		"@utils":__dirname+"/utils",
 		"@services":__dirname+"/services",
 		"@models":__dirname+"/models",
-		"@router":__dirname+"/router",
+		"@routes":__dirname+"/routes",
 		"@schemas":__dirname+"/schemas",
 		"@controllers":__dirname+"/controllers",
+		"@middleware":__dirname+"/middleware",
 	})
 }
 

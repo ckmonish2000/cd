@@ -1,5 +1,5 @@
 import express,{Express} from "express"
-import router from "@router/index"
+import router from "@routes/index"
 
 function createServer():Express{
 	const app = express()
@@ -7,7 +7,7 @@ function createServer():Express{
 	app.use(express.json())
 
 	app.use(router)
-	
+
 	return app
 }
 
