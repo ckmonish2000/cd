@@ -9,3 +9,4 @@ router.post("/api/users",validateResource(createUserSchema),registerUserHandler)
 
 
 export default router
+
