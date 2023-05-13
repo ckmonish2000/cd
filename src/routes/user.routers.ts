@@ -1,6 +1,6 @@
 import {Router} from "express"
-import {createUserSchema } from "@schemas/user.schema"
 import validateResource from "@middleware/validateResource"
+import {createUserSchema } from "@schemas/user.schema"
 import { createUserHandler } from "@controllers/user.controller"
 
 const router = Router()
