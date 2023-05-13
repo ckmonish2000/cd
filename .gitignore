@@ -131,3 +131,7 @@ dist
 
 #build file
 build/
+
+# prisma
+/src/prisma/migrations
+/src/prisma/migration.lock
