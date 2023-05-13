@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String       @id @default(uuid())
+  email           String       @unique
+  password        String
+  createdShortcut Shortcut[]
+  urlAccessList   AccessList[]
+}
+
+model Shortcut {
+  id             String       @default(uuid())
+  shortlink      String
+  url            String
+  ownerId        User         @relation(fields: [userId], references: [id])
+  userId         String
+  Analytics      Analytics[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  userAccessList AccessList[]
+
+  @@id([shortlink, userId])
+}
+
+model AccessList {
+  id                String    @id @default(uuid())
+  User              User?     @relation(fields: [userId], references: [id])
+  userId            String?
+  Shortcut          Shortcut? @relation(fields: [shortcutShortlink, shortcutUserId], references: [shortlink, userId])
+  shortcutShortlink String?
+  shortcutUserId    String?
+}
+
+model Analytics {
+  id                String   @id @default(uuid())
+  urlAccessed       Shortcut @relation(fields: [shortcutShortlink, shortcutUserId], references: [shortlink, userId])
+  shortcutShortlink String
+  shortcutUserId    String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
