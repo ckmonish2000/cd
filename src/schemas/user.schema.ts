@@ -9,4 +9,12 @@ export const createUserSchema = object({
 	}).refine((data)=>{return data.password === data.confirmPassword},{message:"Both password and confirm password must be same"})
 })
 
+export const userLoginSchema = object({
+	body:object({
+		email:string({required_error:"Email can not be empty"}).email({message:"Not a valid email address"}),
+		password:string({required_error:"Please enter a valid email"}).min(8,{message:"password should atleast be 8 charachters  long"}),
+	})
+})
+
 export type createUserInputType = TypeOf<typeof createUserSchema>["body"]
+export type userLoginInputType = TypeOf<typeof userLoginSchema>["body"]
