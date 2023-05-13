@@ -131,3 +131,6 @@ dist
 
 #build file
 build/
+
+# prisma 
+/src/prisma/migrations
