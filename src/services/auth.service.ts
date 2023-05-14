@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client"
 import { hashPassword, validatePassword } from "@utils/auth"
-import { UserCreationResult} from "./user.service.d"
+import { UserCreationResult} from "./auth.service.d"
 
 const prisma = new PrismaClient()
   
@@ -15,17 +15,9 @@ export const createNewUser = async (email:string,password:string):Promise<UserCr
 			}
 		})
         
-		return {success:true,id:newUser.id,status:201}
+		return {success:true,id:newUser.id}
 	}catch(err:any){
-		let message = err?.message
-		let status = 500
-
-		if (err.code === "P2002") {
-			message = "User with this email already exists"
-			status=409
-		}
-
-		return {success:false,error:message,status:status}
+		return {success:false,error:err?.message,errorCode:err.code}
 	}
 }
 
