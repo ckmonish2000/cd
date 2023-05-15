@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient, User } from "@prisma/client"
 import { hashPassword, validatePassword } from "@utils/auth"
 import { UserCreationResult} from "./auth.service.d"
 
@@ -21,20 +21,12 @@ export const createNewUser = async (email:string,password:string):Promise<UserCr
 	}
 }
 
-export const validateUserCredentials = async (email:string,password:string):Promise<boolean>=>{
+
+
+export const checkUserWithEmail = async (email:string):Promise<User | null>=>{
 	const user = await prisma.user.findUnique({
-		where:{
-			email:email
-		}
+		where:{email:email}
 	})
 
-	if(!user){
-		throw new Error("Invalid email or password")
-	}
-
-	const validate = validatePassword(password,user.password)
-
-	return validate
+	return user
 }
-
-
