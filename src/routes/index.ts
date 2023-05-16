@@ -1,5 +1,5 @@
 import {Router,Request,Response} from "express"
-import userRouter from "./user.routers"
+import userRouter from "./auth.routers"
 
 const router = Router()
 
