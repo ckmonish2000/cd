@@ -21,7 +21,6 @@ function createServer():Express{
 		secret:"this is a secret",
 		resave: false,
 		saveUninitialized: true,
-		cookie: { secure: true }
 	}))
 	
 	app.use(router)

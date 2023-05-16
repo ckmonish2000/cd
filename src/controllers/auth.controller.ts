@@ -34,9 +34,12 @@ export const userLoginHandler = async (req:Request<unknown,unknown,userLoginInpu
 		throw new AppError("cd401","Invalid email or password",401)
 	}
 
-	req.session.user = user
+	req.session.user = {
+		id:user.id,
+		email:user.email
+	}
 
-	res.sendStatus(200).send("Welcome To CD")
+	res.status(200).send("Welcome To CD")
 }
 
 export const userLogoutHandler = (req:Request,res:Response)=>{
@@ -44,7 +47,7 @@ export const userLogoutHandler = (req:Request,res:Response)=>{
 		if(err){
 			logger.error(err)
 		}else{
-			res.redirect("/heartbeat")
+			res.send("visit again")
 		}
 	})
 }
