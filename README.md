@@ -12,6 +12,6 @@ URLs serve as the pathways that lead us to our desired destinations on the inter
 
 ## Built with 
 
-[Prisma](prisma.io)
-[Express.js](https://expressjs.com/)
+- [Prisma](prisma.io)
+- [Express.js](https://expressjs.com/)
 
