@@ -21,13 +21,8 @@ export const deleteShortcutSchema = object({
 	})
 })
 
-export const shortcutExpanderSchema = object({
-	params:object({
-		shortcut:string({required_error:"Shortcut name can not be empty"})
-	})
-})
+
 
 export type createShortcutInputType = TypeOf<typeof createShortcutSchema>["body"]
 export type updateShortcutInputType = TypeOf<typeof updateShortcutSchema>["body"]
 export type deleteShortcutInputType = TypeOf<typeof deleteShortcutSchema>["params"]
-export type shortcutExpanderInputType = TypeOf<typeof shortcutExpanderSchema>["params"]
