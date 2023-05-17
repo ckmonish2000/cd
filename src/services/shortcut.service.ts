@@ -69,3 +69,4 @@ export const fetchAllUserShortcuts = async (userId:string):Promise<Shortcut[]>=>
 
 	return userShortcuts
 }
+
