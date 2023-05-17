@@ -2,25 +2,26 @@ import {object,string,TypeOf} from "zod"
 
 export const createShortcutSchema = object({
 	body:object({
-		shortlink:string({required_error:"You have to provide a name to your links."}),
+		shortlink:string({required_error:"You have to provide a name to your links."}).min(2,{message:"shortcut should atleas be 2 char long"}),
 		url:string({required_error:"URL is required"}).url({message:"Please enter a valid url"})
 	})
 })
 
-export const updateShortcutSchema = Object({
+export const updateShortcutSchema = object({
 	body:object({
-		id:string({required_error:"ID cant be empty"}).uuid(),
-		shortlink:string({required_error:"You have to provide a name to your links."}),
-		url:string({required_error:"URL is required"}).url({message:"Please enter a valid url"})
+		shortlink:string({required_error:"You have to provide a name to your links."}).min(2,{message:"shortcut should atleas be 2 char long"}),
+		data:object({
+			url:string().url({message:"Please enter a valid url"}).optional(),
+			shortlink:string().min(2,{message:"shortcut should atleas be 2 char long"}).optional(),
+		})
 	})
 })
 
 export const deleteShortcutSchema = object({
 	params:object({
-		shortcutId:string({required_error:"Please enter a valid shortcut ID"}).uuid()
+		shortlink:string({required_error:"Please enter a valid shortcut ID"}).min(2,{message:"shortcut should atleas be 2 char long"})
 	})
 })
-
 
 
 export type createShortcutInputType = TypeOf<typeof createShortcutSchema>["body"]
