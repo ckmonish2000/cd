@@ -1,9 +1,9 @@
-import { Request,Response,NextFunction,Handler } from "express"
+import { Request,Response,NextFunction } from "express"
+import {CustomHandlerType} from "./tryCatch.d"
 
-
-export const tryCatch = (controller:Handler)=>async (req:Request,res:Response,next:NextFunction)=>{
+export const tryCatch = (controller:CustomHandlerType)=>async (req:Request,res:Response,next:NextFunction)=>{
 	try{
-		await controller(req,res,next)
+		await controller(req,res)
 	}catch(err){
 		next(err)
 	}
