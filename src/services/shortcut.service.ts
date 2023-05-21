@@ -69,7 +69,12 @@ export const deleteShortcut = async (shortlink:string,userId:string):Promise<Sho
 export const fetchAllUserShortcuts = async (userId:string):Promise<Shortcut[]>=>{
 	const userShortcuts = await prisma.shortcut.findMany({
 		where:{
-			userId:userId
+			OR:[
+				{userId:userId},
+				{userAccessList:{
+					some:{id:userId}
+				}}
+			]
 		}
 	})
 
