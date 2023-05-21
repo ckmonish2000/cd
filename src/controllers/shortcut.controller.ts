@@ -5,7 +5,7 @@ import { Request, Response } from "express"
 
 export const createShortcutHandler = async (req:Request<unknown,unknown,createShortcutInputType>,res:Response)=>{
 	const {shortlink,url} = req.body
-	const userId =""    
+	const userId = req.session.user?.id
 
 	const checkShortcut = await fetchShotcutById(shortlink,userId)
 
@@ -20,9 +20,8 @@ export const createShortcutHandler = async (req:Request<unknown,unknown,createSh
 
 export const updateShortcutHandler = async(req:Request<unknown,unknown,updateShortcutInputType>,res:Response)=>{
 	const {data,shortlink} = req.body
-	const userId = ""
+	const userId = req.session.user?.id
 
-    
 	const checkShortcut = await fetchShotcutById(shortlink,userId)
 
 	if(!checkShortcut){
@@ -36,7 +35,14 @@ export const updateShortcutHandler = async(req:Request<unknown,unknown,updateSho
 
 export const deleteShortcutHandler = async (req:Request<deleteShortcutInputType>,res:Response)=>{
 	const {shortlink} = req.params
-	const userId = ""
+	
+	const userId = req.session.user?.id
+
+	const checkShortcut = await fetchShotcutById(shortlink,userId)
+
+	if(!checkShortcut){
+		throw new AppError("cd404","Shortcut with that name does not exist",404)
+	}
 
 	const deletedShortcut = await deleteShortcut(shortlink,userId)
 
@@ -44,7 +50,7 @@ export const deleteShortcutHandler = async (req:Request<deleteShortcutInputType>
 }
 
 export const fetchAllUserShortcutsHandler = async (req:Request,res:Response)=>{
-	const userId = ""
+	const userId = req.session.user?.id
 	const shortcuts = await fetchAllUserShortcuts(userId)
 	return res.status(200).json(shortcuts)
 }
