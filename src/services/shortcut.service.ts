@@ -8,6 +8,11 @@ export const createShortcut = async(shortlink:string,url:string,userId:string):P
 			shortlink:shortlink,
 			url:url,
 			userId:userId,
+			userAccessList:{
+				create:{
+					userId:userId
+				}
+			}
 		}
 	})
 
@@ -34,6 +39,7 @@ export const updateShortcut = async (shortlink:string,userId:string,data:Partial
 		patchData[key] = value
 	})
 
+	console.log(patchData)
 	const updatedData = await prisma.shortcut.update({
 		where:{
 			shortlink_userId:{
