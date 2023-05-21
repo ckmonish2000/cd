@@ -29,6 +29,7 @@ model Shortcut {
   userAccessList AccessList[]
 
   @@id([shortlink, userId])
+  @@index([shortlink])
 }
 
 model AccessList {
@@ -38,6 +39,9 @@ model AccessList {
   Shortcut          Shortcut? @relation(fields: [shortcutShortlink, shortcutUserId], references: [shortlink, userId])
   shortcutShortlink String?
   shortcutUserId    String?
+
+  @@unique([shortcutShortlink, userId])
+  @@index([shortcutShortlink, userId])
 }
 
 model Analytics {
