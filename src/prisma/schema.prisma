@@ -19,7 +19,6 @@ model User {
 }
 
 model Shortcut {
-  id             String       @default(uuid())
   shortlink      String
   url            String
   ownerId        User         @relation(fields: [userId], references: [id])
