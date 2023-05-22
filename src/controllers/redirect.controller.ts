@@ -17,7 +17,7 @@ export const redirectToShortcut = async (req:Request<redirectInputInputType>,res
 
 	const logData = await addAnalyticLog(userId,redirectionData.shortlink,redirectionData.userId)
 
-	logger.info("Added entry to analytics log logID = ", logData.id)
+	logger.debug(`Added entry to analytics log logID = ${logData.id}`)
 
 	res.status(302).redirect(redirectionData.url)
 }

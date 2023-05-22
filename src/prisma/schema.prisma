@@ -16,6 +16,7 @@ model User {
   password        String
   createdShortcut Shortcut[]
   urlAccessList   AccessList[]
+  Analytics       Analytics[]
 }
 
 model Shortcut {
@@ -49,6 +50,8 @@ model Analytics {
   urlAccessed       Shortcut @relation(fields: [shortcutShortlink, shortcutUserId], references: [shortlink, userId])
   shortcutShortlink String
   shortcutUserId    String
+  user              User     @relation(fields: [userId], references: [id])
+  userId            String
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }
