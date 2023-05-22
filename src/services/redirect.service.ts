@@ -1,6 +1,6 @@
-import { PrismaClient, Shortcut } from "@prisma/client"
+import { Shortcut } from "@prisma/client"
+import prisma from "@root/db"
 
-const prisma = new PrismaClient()
 
 export const fetchShortcutForUser = async (shortlink:string,userId:string):Promise<Shortcut|null|undefined>=>{
 	const shortcutData = await prisma.accessList.findFirst({

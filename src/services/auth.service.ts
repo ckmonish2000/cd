@@ -1,8 +1,8 @@
-import { PrismaClient, User } from "@prisma/client"
+import {  User } from "@prisma/client"
 import { hashPassword, validatePassword } from "@utils/auth"
 import { UserCreationResult} from "./auth.service.d"
+import prisma from "@root/db"
 
-const prisma = new PrismaClient()
   
 export const createNewUser = async (email:string,password:string):Promise<UserCreationResult>=>{
 	try{

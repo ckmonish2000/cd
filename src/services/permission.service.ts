@@ -1,6 +1,7 @@
-import { AccessList, PrismaClient } from "@prisma/client"
+import { AccessList } from "@prisma/client"
+import prisma from "@root/db"
 
-const prisma = new PrismaClient()
+
 
 export const addUserToAccessList = async(ownerId:string,userId:string,shortlink:string):Promise<AccessList>=>{
 	const memberData = await prisma.accessList.create({

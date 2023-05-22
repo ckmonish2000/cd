@@ -18,6 +18,7 @@
     "nanoid": "^4.0.2",
     "pino": "^8.12.1",
     "pino-pretty": "^10.0.0",
+    "redis": "^4.6.6",
     "zod": "^3.21.4"
   },
   "devDependencies": {
@@ -39,9 +40,5 @@
     "prisma": "^4.14.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.4"
-  },
-  "_moduleAliases": {
-    "@services": "src/services",
-    "@utils": "src/utils"
   }
 }

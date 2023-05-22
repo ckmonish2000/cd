@@ -1,6 +1,7 @@
-import { Analytics, Prisma, PrismaClient } from "@prisma/client"
+import { Analytics, Prisma } from "@prisma/client"
+import prisma from "@root/db"
 
-const prisma = new PrismaClient()
+
 
 export const addAnalyticLog = async (userId:string,shortlink:string,ownerId:string):Promise<Analytics>=>{
 	const logData = await prisma.analytics.create({

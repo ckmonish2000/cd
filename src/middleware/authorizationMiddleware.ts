@@ -1,7 +1,6 @@
+import prisma from "@root/db"
 import { NextFunction, Request, Response } from "express"
-import {PrismaClient} from "@prisma/client"
 
-const prisma = new PrismaClient()
 
 const authorizationMiddleware = async (req:Request,res:Response,next:NextFunction)=>{
 	if(req.session && req.session.user){
