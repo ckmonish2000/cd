@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client"
+import redis from "redis"
 
-const prisma = new PrismaClient({})
-
-export default prisma
+export const prisma = new PrismaClient({})
+export const cache = redis.createClient({})

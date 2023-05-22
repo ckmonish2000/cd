@@ -1,5 +1,5 @@
 import { Shortcut } from "@prisma/client"
-import prisma from "@root/db"
+import {prisma} from "@root/db"
 
 
 export const fetchShortcutForUser = async (shortlink:string,userId:string):Promise<Shortcut|null|undefined>=>{

@@ -1,5 +1,5 @@
 import { Analytics, Prisma } from "@prisma/client"
-import prisma from "@root/db"
+import {prisma} from "@root/db"
 
 
 

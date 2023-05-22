@@ -1,5 +1,5 @@
 import {Shortcut} from "@prisma/client"
-import prisma from "@root/db"
+import {prisma} from "@root/db"
 
 
 export const createShortcut = async(shortlink:string,url:string,userId:string):Promise<Partial<Shortcut>>=>{

@@ -1,4 +1,4 @@
-import prisma from "@root/db"
+import {prisma} from "@root/db"
 import { NextFunction, Request, Response } from "express"
 
 
