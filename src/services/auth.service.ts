@@ -4,21 +4,17 @@ import { UserCreationResult} from "./auth.service.d"
 import {prisma} from "@root/db"
 
   
-export const createNewUser = async (email:string,password:string):Promise<UserCreationResult>=>{
-	try{
-		const hashedpassword = await hashPassword(password)
+export const createNewUser = async (email:string,password:string): Promise<User>=>{
+	const hashedpassword = await hashPassword(password)
 
-		const newUser = await prisma.user.create({
-			data:{
-				email:email,
-				password:String(hashedpassword),
-			}
-		})
+	const newUser = await prisma.user.create({
+		data:{
+			email:email,
+			password:String(hashedpassword),
+		}
+	})
         
-		return {success:true,id:newUser.id}
-	}catch(err:any){
-		return {success:false,error:err?.message,errorCode:err.code}
-	}
+	return newUser
 }
 
 
