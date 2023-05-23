@@ -13,6 +13,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "ioredis": "^5.3.2",
     "loadash": "^1.0.0",
     "module-alias": "^2.2.2",
     "nanoid": "^4.0.2",
@@ -39,9 +40,5 @@
     "prisma": "^4.14.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.4"
-  },
-  "_moduleAliases": {
-    "@services": "src/services",
-    "@utils": "src/utils"
   }
 }

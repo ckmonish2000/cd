@@ -17,6 +17,7 @@ export const createShortcutHandler = async (req:Request<unknown,unknown,createSh
 
 	return res.status(200).json(newShortcut)
 }
+  
 
 export const updateShortcutHandler = async(req:Request<unknown,unknown,updateShortcutInputType>,res:Response)=>{
 	const {data,shortlink} = req.body
@@ -45,6 +46,7 @@ export const deleteShortcutHandler = async (req:Request<deleteShortcutInputType>
 	}
 
 	const deletedShortcut = await deleteShortcut(shortlink,userId)
+
 
 	return res.status(200).json(deletedShortcut)
 }

@@ -14,4 +14,6 @@ URLs serve as the pathways that lead us to our desired destinations on the inter
 
 - [Prisma](prisma.io)
 - [Express.js](https://expressjs.com/)
+- [MySQL](https://www.mysql.com/)
+- [Redis](https://redis.io/)
 

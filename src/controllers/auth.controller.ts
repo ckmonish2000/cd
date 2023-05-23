@@ -4,26 +4,24 @@ import { checkUserWithEmail, createNewUser } from "@services/auth.service"
 import logger from "@utils/logger"
 import { AppError, tryCatch } from "@utils/tryCatch"
 import { validatePassword } from "@utils/auth"
+import { cache } from "@root/db"
 
 
 export const registerUserHandler = async (req:Request<unknown,unknown,registerUserInputType>,res:Response)=>{
 	const {email,password} = req.body
 	const registered = await createNewUser(email,password)
-	
-	if(!registered.success && registered.errorCode === "P2002"){
-		throw new AppError(registered.errorCode,"User with this email already exists",409)
-	}
-
-	if(registered.success){
-		res.status(201).json({id:registered?.id})
-	}
+	res.status(201).json({id:registered?.id})
 }
 
 export const userLoginHandler = async (req:Request<unknown,unknown,userLoginInputType>,res:Response)=>{
 	const {email,password} = req.body
 
-	const user = await checkUserWithEmail(email)
+	if(req.session.user?.id){
+		res.status(200).send("You are already logged in")
+	}
 
+	const user = await checkUserWithEmail(email)
+	
 	if(!user){
 		throw new AppError("cd404","Please consider registering first",404)
 	}
