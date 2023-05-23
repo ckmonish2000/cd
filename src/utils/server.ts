@@ -1,4 +1,5 @@
 import express,{Express} from "express"
+import config from "config"
 import expressSessions from "express-session"
 import router from "@routes/index"
 import errorHandler from "@middleware/errorHandler"
@@ -13,20 +14,20 @@ declare module "express-session" {
 
 function createServer():Express{
 	const app = express()
-	
-	app.use(rateLimiter)
+	const sessionSecret = Buffer.from(config.get("privateKey")).toString("ascii")
+
 	app.use(express.json())
-
+	
 	app.use(cookieParser())
-
+	
 	app.use(expressSessions({
-		secret:"this is a secret",
+		secret:sessionSecret,
 		resave: false,
 		saveUninitialized: true,
 	}))
 	
+	app.use(rateLimiter)
 	app.use(router)
-	
 	app.use(errorHandler)
 	
 	return app
