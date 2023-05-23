@@ -1,12 +1,13 @@
 import { Shortcut } from "@prisma/client"
 import {cache, prisma} from "@root/db"
+import { getCache } from "@utils/cacheHelper"
 
 
 export const fetchShortcutForUser = async (shortlink:string,userId:string):Promise<Shortcut|null|undefined>=>{
 	const cachedKey = `redirect-${shortlink}-${userId}`
-	const cachedData = await cache.get(cachedKey)
+	const cachedData = await getCache(cachedKey)
 
-	if(cachedData && cachedData!=="null"){
+	if(cachedData){
 		return JSON.parse(cachedData)
 	}
 
@@ -21,7 +22,7 @@ export const fetchShortcutForUser = async (shortlink:string,userId:string):Promi
 	})
 
 	if(shortcutData){
-		await cache.set(cachedKey,JSON.stringify(shortcutData?.Shortcut),{EX:5*60})
+		await cache.set(cachedKey,JSON.stringify(shortcutData?.Shortcut),"EX",5*60,"NX")
 	}
 
 	return shortcutData?.Shortcut

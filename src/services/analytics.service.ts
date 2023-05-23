@@ -1,5 +1,6 @@
 import { Analytics, Prisma } from "@prisma/client"
 import {cache, prisma} from "@root/db"
+import { getCache } from "@utils/cacheHelper"
 
 export const addAnalyticLog = async (userId:string,shortlink:string,ownerId:string):Promise<Analytics>=>{
 	const logData = await prisma.analytics.create({
@@ -10,7 +11,6 @@ export const addAnalyticLog = async (userId:string,shortlink:string,ownerId:stri
 		}
 	})
 	
-
 	return logData
 }
 
@@ -21,10 +21,9 @@ export const fetchAllLogsForShortcut = async(shortlink:string,ownerId:string)=>{
 	}
 
 	const key = `analytics-${shortlink}-${ownerId}`
-
-	const cachedData = await cache.get(key)
+	const cachedData = await getCache(key)
 	
-	if(cachedData && cachedData!=="null"){
+	if(cachedData){
 		return JSON.parse(cachedData)
 	}
 
@@ -39,19 +38,8 @@ export const fetchAllLogsForShortcut = async(shortlink:string,ownerId:string)=>{
 	const total = await prisma.analytics.count({where:condition})
 	const data = {_count:logs,total: total}
 
-	await cache.set(key,JSON.stringify(data),{EX:40})
+	await cache.set(key,JSON.stringify(data),"EX",10,"NX")
+
 	return data
 }
 
-export const fetchAllLogsForUser = async(userId:string)=>{
-	const logs = await prisma.analytics.findMany({
-		where:{
-			userId:userId
-		},
-		include:{
-			user:true
-		}
-	})
-
-	return logs
-}

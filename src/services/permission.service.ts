@@ -1,5 +1,6 @@
 import { AccessList } from "@prisma/client"
 import {cache, prisma} from "@root/db"
+import { getCache, unlinkKeys } from "@utils/cacheHelper"
 
 export const addUserToAccessList = async(ownerId:string,userId:string,shortlink:string):Promise<AccessList>=>{
 	const memberData = await prisma.accessList.create({
@@ -14,7 +15,7 @@ export const addUserToAccessList = async(ownerId:string,userId:string,shortlink:
 	})
 
 	const cachedKey = `redirect-${shortlink}-${userId}`
-	await cache.set(cachedKey,JSON.stringify(memberData.Shortcut),{EX:5*60})
+	await cache.set(cachedKey,JSON.stringify(memberData.Shortcut),"EX",5*60)
 
 	return memberData
 }
@@ -34,11 +35,7 @@ export const removeUserFromAccessList = async (id:string):Promise<AccessList>=>{
 	const userId = revokedMemberData.userId
 
 	const cachedKey = `redirect-${shortlink}-${userId}`
-	const cachedData = await cache.get(cachedKey)
-
-	if(cachedData && cachedData!=="null"){
-		await cache.del(cachedKey)
-	}
+	await unlinkKeys(cachedKey)
 
 	return revokedMemberData
 }

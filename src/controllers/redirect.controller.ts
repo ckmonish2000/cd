@@ -15,9 +15,9 @@ export const redirectToShortcut = async (req:Request<redirectInputInputType>,res
 		throw new AppError("cd404","Could not find the shortcut, Either create or request permission for the shotcut",404)
 	}
 
-	const logData = await addAnalyticLog(userId,redirectionData.shortlink,redirectionData.userId)
+	// const logData = await addAnalyticLog(userId,redirectionData.shortlink,redirectionData.userId)
 
-	logger.debug(`Added entry to analytics log logID = ${logData.id}`)
+	// logger.debug(`Added entry to analytics log logID = ${logData.id}`)
 
 	res.status(302).redirect(redirectionData.url)
 }

@@ -1,10 +1,11 @@
 import {AccessList, Shortcut} from "@prisma/client"
 import {cache, prisma} from "@root/db"
+import { getCache, unlinkKeys } from "@utils/cacheHelper"
 
 
 export const createShortcut = async(shortlink:string,url:string,userId:string):Promise<Partial<Shortcut>>=>{
 
-	const newShortcut = await prisma.shortcut.create({
+	const newShortcut:Shortcut = await prisma.shortcut.create({
 		data:{
 			shortlink:shortlink,
 			url:url,
@@ -23,13 +24,14 @@ export const createShortcut = async(shortlink:string,url:string,userId:string):P
 export const fetchShotcutById =async (shortlink:string,userId:string):Promise<Shortcut | null> => {
 	const cacheKey = `shortcut-${shortlink}-${userId}`
 
-	const cachedData = await cache.get(cacheKey)
+	const cachedData = await getCache(cacheKey)
 	
-	if(cachedData && cachedData!=="null"){
-		return JSON.parse(cachedData)
+	if(cachedData){
+		const parsedData:Shortcut|null = JSON.parse(cachedData)
+		return parsedData
 	}
 
-	const shortcut = await prisma.shortcut.findUnique({where:{
+	const shortcut:Shortcut|null = await prisma.shortcut.findUnique({where:{
 		shortlink_userId:{
 			shortlink:shortlink,
 			userId:userId
@@ -37,7 +39,7 @@ export const fetchShotcutById =async (shortlink:string,userId:string):Promise<Sh
 	}
 	})
 	
-	await cache.set(cacheKey,JSON.stringify(shortcut),{EX:60*30,NX:true})
+	await cache.set(cacheKey,JSON.stringify(shortcut),"EX",60*10,"NX")
 
 	return shortcut
 }
@@ -53,7 +55,7 @@ export const updateShortcut = async (shortlink:string,userId:string,data:Partial
 		patchData[key] = value
 	})
 
-	const updatedData = await prisma.shortcut.update({
+	const updatedData= await prisma.shortcut.update({
 		where:{
 			shortlink_userId:{
 				shortlink:shortlink,
@@ -66,11 +68,8 @@ export const updateShortcut = async (shortlink:string,userId:string,data:Partial
 		}
 	})
 
-	const cachedData = await cache.get(cacheKey)
-	
-	if(cachedData && cachedData!=="null"){
-		await cache.del(cacheKey)
-	}
+	await unlinkKeys(cacheKey)	
+	await unlinkKeys(`redirect-${shortlink}-*`)
 
 	return updatedData
 }
@@ -87,11 +86,8 @@ export const deleteShortcut = async (shortlink:string,userId:string):Promise<Sho
 		}
 	})
 
-	const cachedData = await cache.get(cacheKey)
-	
-	if(cachedData && cachedData!=="null"){
-		await cache.del(cacheKey)
-	}
+	await unlinkKeys(cacheKey)
+	await unlinkKeys(`redirect-${shortlink}-*`)
 
 	return deletedData
 }

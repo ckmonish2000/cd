@@ -10,7 +10,6 @@ export const addUserToAccessListHandler = async(req:Request<unknown,unknown,perm
     
 	const validateOwner = await fetchShotcutById(shortlink,ownerId)
     
-	console.log(validateOwner,ownerId,shortlink)
 	if(!validateOwner){
 		throw new AppError("cd404","Could not provide permission as the requested shotcut was not found",404)
 	}
@@ -40,7 +39,7 @@ export const revokeUserToAccessListHandler =async (req:Request<revokePermissionI
 export const fetchAccessListForUrlHandler =async (req:Request<fetchAccessListForUrlInputType>,res:Response)=>{
 	const {shortlink} = req.params
 	const ownerId = req.session.user?.id
-	console.log(ownerId)
+
 	const validateOwner = await fetchShotcutById(shortlink,ownerId)
     
 	if(!validateOwner){

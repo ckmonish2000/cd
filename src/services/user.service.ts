@@ -1,12 +1,14 @@
 import { User } from "@prisma/client"
 import { cache, prisma } from "@root/db"
+import { getCache } from "@utils/cacheHelper"
 
 export const fetchUserById = async (userId:string):Promise<User | null>=>{
 	const cacheKey = `user-${userId}`
-	const cachedData = await cache.get(cacheKey)
+	const cachedData = await getCache(cacheKey)
 	
-	if(cachedData && cachedData!=="null"){
-		return JSON.parse(cachedData)
+	if(cachedData){
+		const parsedData:User | null = JSON.parse(cachedData)
+		return parsedData
 	}
 
 	const userData = await prisma.user.findUnique({
@@ -15,6 +17,7 @@ export const fetchUserById = async (userId:string):Promise<User | null>=>{
 		}
 	})
 
-	await cache.set(cacheKey,JSON.stringify(userData),{EX:60*120,NX:true})
+	await cache.set(cacheKey,JSON.stringify(userData),"EX",60*120,"NX")
+
 	return userData
 }
