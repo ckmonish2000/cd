@@ -3,6 +3,7 @@ import expressSessions from "express-session"
 import router from "@routes/index"
 import errorHandler from "@middleware/errorHandler"
 import cookieParser from "cookie-parser"
+import rateLimiter from "@middleware/rateLimiter"
 
 declare module "express-session" {
 	export interface SessionData {
@@ -13,6 +14,7 @@ declare module "express-session" {
 function createServer():Express{
 	const app = express()
 	
+	app.use(rateLimiter)
 	app.use(express.json())
 
 	app.use(cookieParser())
