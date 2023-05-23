@@ -1,6 +1,5 @@
 import {  User } from "@prisma/client"
-import { hashPassword, validatePassword } from "@utils/auth"
-import { UserCreationResult} from "./auth.service.d"
+import { hashPassword } from "@utils/auth"
 import {prisma} from "@root/db"
 
   
@@ -16,7 +15,6 @@ export const createNewUser = async (email:string,password:string): Promise<User>
         
 	return newUser
 }
-
 
 
 export const checkUserWithEmail = async (email:string):Promise<User | null>=>{

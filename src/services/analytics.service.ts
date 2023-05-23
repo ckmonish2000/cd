@@ -1,7 +1,5 @@
 import { Analytics, Prisma } from "@prisma/client"
-import {prisma} from "@root/db"
-
-
+import {cache, prisma} from "@root/db"
 
 export const addAnalyticLog = async (userId:string,shortlink:string,ownerId:string):Promise<Analytics>=>{
 	const logData = await prisma.analytics.create({
@@ -22,6 +20,14 @@ export const fetchAllLogsForShortcut = async(shortlink:string,ownerId:string)=>{
 		shortcutUserId:ownerId
 	}
 
+	const key = `analytics-${shortlink}-${ownerId}`
+
+	const cachedData = await cache.get(key)
+	
+	if(cachedData && cachedData!=="null"){
+		return JSON.parse(cachedData)
+	}
+
 	const logs = await prisma.analytics.groupBy({
 		by:["userId"],
 		_count:{
@@ -31,8 +37,10 @@ export const fetchAllLogsForShortcut = async(shortlink:string,ownerId:string)=>{
 	})
 
 	const total = await prisma.analytics.count({where:condition})
+	const data = {_count:logs,total: total}
 
-	return {_count:logs,total: total}
+	await cache.set(key,JSON.stringify(data),{EX:40})
+	return data
 }
 
 export const fetchAllLogsForUser = async(userId:string)=>{

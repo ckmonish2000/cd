@@ -4,7 +4,6 @@ import createServer from "@utils/server"
 import logger from "@utils/logger"
 import { connectToRedis } from "@utils/connectToDB"
 
-
 const port = config.get<number>("port")
 const app = createServer()
 

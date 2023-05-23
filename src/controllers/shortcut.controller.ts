@@ -1,3 +1,4 @@
+import { cache } from "@root/db"
 import { createShortcutInputType, deleteShortcutInputType, updateShortcutInputType } from "@schemas/shortcut.schema"
 import { createShortcut, deleteShortcut, fetchAllUserShortcuts, fetchShotcutById, updateShortcut } from "@services/shortcut.service"
 import { AppError } from "@utils/tryCatch"
@@ -17,6 +18,7 @@ export const createShortcutHandler = async (req:Request<unknown,unknown,createSh
 
 	return res.status(200).json(newShortcut)
 }
+  
 
 export const updateShortcutHandler = async(req:Request<unknown,unknown,updateShortcutInputType>,res:Response)=>{
 	const {data,shortlink} = req.body
@@ -29,6 +31,8 @@ export const updateShortcutHandler = async(req:Request<unknown,unknown,updateSho
 	}
 
 	const updatedShortcut = await updateShortcut(shortlink,userId,data)
+
+	cache.flushAll()
 
 	return res.status(200).json(updatedShortcut)
 }
@@ -45,6 +49,8 @@ export const deleteShortcutHandler = async (req:Request<deleteShortcutInputType>
 	}
 
 	const deletedShortcut = await deleteShortcut(shortlink,userId)
+
+	cache.flushAll()
 
 	return res.status(200).json(deletedShortcut)
 }
