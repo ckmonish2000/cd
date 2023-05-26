@@ -1,6 +1,8 @@
 interface IMemoryStoreValue {
-    count:number;
-    expiry: number;
+	count: number
+	expiry: number
 }
 
-export type MemoryStoreType = {[key:string]:IMemoryStoreValue}
+export type MemoryStoreType = {
+	[key: string]: IMemoryStoreValue
+}

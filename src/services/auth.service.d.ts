@@ -1,13 +1,14 @@
-
 type SuccessUserCreationResult = {
-    success: true
-    id:string
+	success: true
+	id: string
 }
 
 type FailedUserCreationResult = {
-    success: false
-    error: string
-    errorCode:string
+	success: false
+	error: string
+	errorCode: string
 }
-    
-export type UserCreationResult = SuccessUserCreationResult | FailedUserCreationResult
+
+export type UserCreationResult =
+	| SuccessUserCreationResult
+	| FailedUserCreationResult

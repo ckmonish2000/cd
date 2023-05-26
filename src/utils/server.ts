@@ -1,4 +1,4 @@
-import express,{Express} from "express"
+import express, {Express} from "express"
 import config from "config"
 import expressSessions from "express-session"
 import router from "@routes/index"
@@ -8,28 +8,32 @@ import rateLimiter from "@middleware/rateLimiter"
 
 declare module "express-session" {
 	export interface SessionData {
-	user: { [key: string]: any };
+		user: {
+			[key: string]: any
+		}
 	}
-}	
+}
 
-function createServer():Express{
+function createServer(): Express {
 	const app = express()
 	const sessionSecret = Buffer.from(config.get("privateKey")).toString("ascii")
 
 	app.use(express.json())
-	
+
 	app.use(cookieParser())
-	
-	app.use(expressSessions({
-		secret:sessionSecret,
-		resave: false,
-		saveUninitialized: true,
-	}))
-	
+
+	app.use(
+		expressSessions({
+			secret: sessionSecret,
+			resave: false,
+			saveUninitialized: true,
+		})
+	)
+
 	app.use(rateLimiter)
 	app.use(router)
 	app.use(errorHandler)
-	
+
 	return app
 }
 
