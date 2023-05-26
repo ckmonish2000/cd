@@ -3,5 +3,5 @@ export default {
 	maxReqPerHr: 150,
 	redisHost: "",
 	redisPort: "",
-	privateKey: "",
+	privateKey: "secret",
 }
