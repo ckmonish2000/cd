@@ -4,7 +4,6 @@ import {checkUserWithEmail, createNewUser} from "@services/auth.service"
 import logger from "@utils/logger"
 import {AppError, tryCatch} from "@utils/tryCatch"
 import {validatePassword} from "@utils/auth"
-import {cache} from "@root/db"
 
 export const registerUserHandler = async (
 	req: Request<unknown, unknown, registerUserInputType>,
