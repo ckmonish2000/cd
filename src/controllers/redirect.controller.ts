@@ -22,9 +22,11 @@ export const redirectToShortcut = async (
 		)
 	}
 
-	// const logData = await addAnalyticLog(userId,redirectionData.shortlink,redirectionData.userId)
-
-	// logger.debug(`Added entry to analytics log logID = ${logData.id}`)
+	if(redirectionData){
+		const logData = await addAnalyticLog(userId,redirectionData.shortlink,redirectionData.userId)
+	
+		logger.debug(`Added entry to analytics log logID = ${logData.id}`)
+	}
 
 	res.status(302).redirect(redirectionData.url)
 }
