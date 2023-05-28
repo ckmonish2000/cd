@@ -1,7 +1,7 @@
 export default {
 	port: 3000,
 	maxReqPerHr: 150,
-	redisHost: "",
-	redisPort: "",
+	redisHost: "localhost",
+	redisPort: "6379",
 	privateKey: "secret",
 }
