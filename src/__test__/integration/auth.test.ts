@@ -2,7 +2,7 @@ import supertest from "supertest"
 import createServer from "@utils/server"
 import * as authService from "@services/auth.service"
 import * as authUtils from "@utils/auth"
-import { primaryUser } from "./mock"
+import { primaryUser, secondaryUser } from "./mock"
 import { v4 as uuidv4 } from 'uuid';
 
 
@@ -84,8 +84,6 @@ describe('heartbeat', () => {
                 confirmPassword:primaryUser.password+uuidv4(),
             })
 
-            console.log(res.statusCode,res.body)
-
             expect(res.body.length).toBe(1)
             expect(res.body[0].message).toEqual("Both password and confirm password must be same")
         })
@@ -133,4 +131,18 @@ describe('Login Route', () => {
             expect(res.headers["set-cookie"]).toBeDefined()
         })
     })
- })
+
+    describe("Given invalid email",()=>{
+       it.only("should return 404",async()=>{
+        const checkUserWithEmail = jest.spyOn(authService,"checkUserWithEmail")
+
+        checkUserWithEmail.mockResolvedValue(null)
+
+        const res = await supertest(app).post("/api/login").send(secondaryUser)
+
+        expect(res.statusCode).toBe(404)
+        expect(res.text).toBe("Please consider registering first")
+        expect(res.headers["set-cookie"]).toBeUndefined()
+       })
+    })
+    })
