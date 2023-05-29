@@ -42,9 +42,11 @@ export const userLoginHandler = async (
 		id: user.id,
 		email: user.email,
 	}
-
+			
 	res.status(200).send("Welcome To CD")
-}
+	}
+
+
 
 export const userLogoutHandler = (req: Request, res: Response) => {
 	req.session.destroy((err) => {

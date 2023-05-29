@@ -26,7 +26,7 @@ function createServer(): Express {
 		expressSessions({
 			secret: sessionSecret,
 			resave: false,
-			saveUninitialized: true,
+			saveUninitialized: false,
 		})
 	)
 
