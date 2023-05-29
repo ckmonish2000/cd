@@ -1,8 +1,10 @@
 import supertest from "supertest"
 import createServer from "@utils/server"
 import * as authService from "@services/auth.service"
+import * as authUtils from "@utils/auth"
 import { primaryUser } from "./mock"
 import { v4 as uuidv4 } from 'uuid';
+
 
 const app = createServer()
 const  server = supertest(app)
@@ -13,8 +15,6 @@ describe('heartbeat', () => {
         expect(res.statusCode).toBe(200)
     })
  })
-
-
 
  describe('Registeration Route', () => { 
 
@@ -111,3 +111,26 @@ describe('heartbeat', () => {
   })
 
 
+describe('Login Route', () => { 
+    describe("Given valid creds",()=>{
+        it.only("should return 200 with cookie",async ()=>{
+            const userId = uuidv4()
+            const checkUserWithEmail = jest.spyOn(authService,"checkUserWithEmail")
+            const validatePassword = jest.spyOn(authUtils,"validatePassword")
+
+            checkUserWithEmail.mockResolvedValue({
+                id:userId,
+                email:primaryUser.email,
+                password:primaryUser.password
+            })
+
+            validatePassword.mockResolvedValue(true)
+
+            const res = await supertest(app).post("/api/login").send(primaryUser)
+            
+            expect(res.statusCode).toBe(200)
+            expect(res.text).toBe("Welcome To CD")
+            expect(res.headers["set-cookie"]).toBeDefined()
+        })
+    })
+ })
