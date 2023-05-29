@@ -1,20 +1,11 @@
 import supertest from "supertest"
 import createServer from "@utils/server"
 import * as authService from "@services/auth.service"
-import express from "express"
+import { primaryUser } from "./mock"
+import { v4 as uuidv4 } from 'uuid';
 
 const app = createServer()
 const  server = supertest(app)
-
-const testUser = {
-    email:"mrx@gmail.com",
-    password:"admin@123",
-}
-
-const userInfo = {
-    email:"ckmonish2001@gmail.com",
-    password:"admin@123"
-}
 
 describe('heartbeat', () => {
     it("validate server is running",async ()=>{
@@ -23,11 +14,15 @@ describe('heartbeat', () => {
     })
  })
 
+
+
  describe('Registeration Route', () => { 
 
-    describe("Given empty req body",()=>{
-        
-        it.only("should throw 400",async()=>{
+    describe("Given partial or empty req body",()=>{
+
+        it("Empty body should return 400",async()=>{
+            // should throw 3 validation errors
+
             const res = await server.post("/api/register").send({})
             const errBody = res.body
             
@@ -41,42 +36,78 @@ describe('heartbeat', () => {
             expect(res.statusCode).toBe(400)
         })
 
-        
-    })
+        it("Missing email should return 400",async()=>{
+            // should throw 1 validation errors
 
-
-    describe("given complete body", ()=>{
-       it("should return 201 status code with id",async()=>{
-        const res = await server.post("/api/register").send({
-            email:testUser.email,
-            password:testUser.password,
-            confirmPassword:testUser.password,
-        })
-            expect(res.statusCode).toBe(201)
-       })
-    })
-  })
-
-
-  describe('Login Route', () => { 
-    
-    describe('Given Username and Password', () => { 
-        it("Should return 200 with cookie header",async ()=>{
-           
-            const res = await supertest(app).post("/api/login").send({
-                email:"ckmonish2001@gmail.com",
-                password:"admin@123"
+            const res = await server.post("/api/register").send({
+                password:primaryUser.password,
+                confirmPassword:primaryUser.password,
             })
-            expect(res.statusCode).toBe(200)
-            expect(res.text).toBe("Welcome To CD")
-            expect(res.headers["set-cookie"]).toBeDefined()
+    
+            expect(res.body[0].message).toEqual("Email is a required field")
+            expect(res.body.length).toBe(1)
+           })
+
+
+           it("Missing password should return 400",async()=>{
+            // should throw 1 validation errors and return 400 status code
+            
+            const res = await server.post("/api/register").send({
+                email:primaryUser.email,
+                confirmPassword:primaryUser.password,
+            })
+            
+            expect(res.body[0].message).toEqual("password is a required field")
+            expect(res.body.length).toBe(1)
+           })
+
+
+           it("Missing confirm password should return 400",async()=>{
+            // should throw 1 validation errors and return 400 status code
+            
+            const res = await server.post("/api/register").send({
+                email:primaryUser.email,
+                password:primaryUser.password,
+            })
+            
+            expect(res.body[0].message).toEqual("confirm password is a required field")
+            expect(res.body.length).toBe(1)
+           })
+    })
+
+
+    describe('Given different password and confirm password ', () => {
+        it("should return 400",async()=>{
+            const res = await server.post("/api/register").send({
+                email:primaryUser.email,
+                password:primaryUser.password,
+                confirmPassword:primaryUser.password+uuidv4(),
+            })
+
+            console.log(res.statusCode,res.body)
+
+            expect(res.body.length).toBe(1)
+            expect(res.body[0].message).toEqual("Both password and confirm password must be same")
         })
      })
 
-     describe('Given Username is missing', () => {
-        it("should return 400 ",()=>{})
-      })
+    describe("given complete body", ()=>{
+       it("should return 201 status code with id",async()=>{
+        const userId = uuidv4()
+        const createNewUser = jest.spyOn(authService,"createNewUser")
+        createNewUser.mockResolvedValue({email:primaryUser.email,password:primaryUser.password,id:userId})
 
+        const res = await server.post("/api/register").send({
+            email:primaryUser.email,
+            password:primaryUser.password,
+            confirmPassword:primaryUser.password,
+        })
+
+        expect(res.statusCode).toBe(201)
+        expect(createNewUser.mock.calls.length).toBe(1)
+        expect(res.body.id).toEqual(userId)
+       })
+    })
   })
 
 
