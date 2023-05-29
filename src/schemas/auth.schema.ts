@@ -13,7 +13,7 @@ export const registerUserSchema = object({
 			message: "password should atleast be 8 charachters long",
 		}),
 		confirmPassword: string({
-			required_error: "password is a required field",
+			required_error: "confirm password is a required field",
 		}),
 	}).refine(
 		(data) => {
