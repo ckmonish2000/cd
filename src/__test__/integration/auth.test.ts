@@ -110,8 +110,66 @@ describe('heartbeat', () => {
 
 
 describe('Login Route', () => { 
+    describe('Given malformed req body', () => { 
+        
+        it("Given empty body",async()=>{
+            
+            const res = await server.post("/api/login").send({})
+            const errBody = res.body
+            
+            for (const err of errBody){
+                expect(err.message).toBeDefined()
+            }
+
+            expect(errBody.length).toBe(2)
+            expect(res.statusCode).toBe(400)
+        })
+
+        it("Given missing email",async()=>{
+            const res = await server.post("/api/login").send({
+                password:primaryUser.password,
+            })
+            
+            expect(res.statusCode).toBe(400)
+            expect(res.body[0].message).toEqual("Email can not be empty")
+            expect(res.body.length).toBe(1)
+        })
+
+        it("Given missing password",async()=>{
+            const res = await server.post("/api/login").send({
+                email:primaryUser.email
+            })
+            
+            expect(res.statusCode).toBe(400)
+            expect(res.body[0].message).toEqual("Please enter a valid password")
+            expect(res.body.length).toBe(1)
+        })
+
+        it("Given malformed email",async()=>{
+            const res = await server.post("/api/login").send({
+                email:"username",
+                password:primaryUser.password
+            })
+            
+            expect(res.statusCode).toBe(400)
+            expect(res.body[0].message).toEqual("Not a valid email address")
+            expect(res.body.length).toBe(1)
+        })
+
+        it("Given password less than min length",async()=>{
+            const res = await server.post("/api/login").send({
+                email:primaryUser.email,
+                password:"123"
+            })
+            
+            expect(res.statusCode).toBe(400)
+            expect(res.body[0].message).toEqual("password should atleast be 8 charachters  long")
+            expect(res.body.length).toBe(1)
+        })
+     })
+
     describe("Given valid creds",()=>{
-        it.only("should return 200 with cookie",async ()=>{
+        it("should return 200 with cookie",async ()=>{
             const userId = uuidv4()
             const checkUserWithEmail = jest.spyOn(authService,"checkUserWithEmail")
             const validatePassword = jest.spyOn(authUtils,"validatePassword")
@@ -133,7 +191,7 @@ describe('Login Route', () => {
     })
 
     describe("Given invalid email",()=>{
-       it.only("should return 404",async()=>{
+       it("should return 404",async()=>{
         const checkUserWithEmail = jest.spyOn(authService,"checkUserWithEmail")
 
         checkUserWithEmail.mockResolvedValue(null)
@@ -145,4 +203,29 @@ describe('Login Route', () => {
         expect(res.headers["set-cookie"]).toBeUndefined()
        })
     })
+
+    describe("Given invalid password",()=>{
+        it("should return 404",async()=>{
+        const userId = uuidv4()
+         const checkUserWithEmail = jest.spyOn(authService,"checkUserWithEmail")
+         const validatePassword = jest.spyOn(authUtils,"validatePassword")
+
+         validatePassword.mockResolvedValue(false)
+
+         checkUserWithEmail.mockResolvedValue({
+            id:userId,
+            email:primaryUser.email,
+            password:secondaryUser.password
+         })
+ 
+         const res = await supertest(app).post("/api/login").send({
+            email:primaryUser.email,
+            password:secondaryUser.password
+         })
+ 
+         expect(res.statusCode).toBe(401)
+         expect(res.text).toBe("Invalid email or password")
+         expect(res.headers["set-cookie"]).toBeUndefined()
+        })
+     })
     })
