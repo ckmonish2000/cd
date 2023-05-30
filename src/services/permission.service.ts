@@ -1,6 +1,6 @@
 import {AccessList} from "@prisma/client"
 import {cache, prisma} from "@root/db"
-import {getCache, unlinkKeys} from "@utils/cacheHelper"
+import {getCache, setCache, unlinkKeys} from "@utils/cacheHelper"
 
 export const addUserToAccessList = async (
 	ownerId: string,
@@ -19,7 +19,7 @@ export const addUserToAccessList = async (
 	})
 
 	const cachedKey = `redirect-${shortlink}-${userId}`
-	await cache.set(cachedKey, JSON.stringify(memberData.Shortcut), "EX", 5 * 60)
+	await setCache(cachedKey, JSON.stringify(memberData.Shortcut), "EX", 5 * 60)
 
 	return memberData
 }

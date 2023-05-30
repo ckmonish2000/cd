@@ -1,6 +1,6 @@
 import {Analytics, Prisma} from "@prisma/client"
 import {cache, prisma} from "@root/db"
-import {getCache} from "@utils/cacheHelper"
+import {getCache, setCache} from "@utils/cacheHelper"
 
 export const addAnalyticLog = async (
 	userId: string,
@@ -50,7 +50,7 @@ export const fetchAllLogsForShortcut = async (
 		total: total,
 	}
 
-	await cache.set(key, JSON.stringify(data), "EX", 10, "NX")
+	await setCache(key, JSON.stringify(data), "EX", 10, "NX")
 
 	return data
 }

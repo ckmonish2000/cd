@@ -1,6 +1,6 @@
 import {Shortcut} from "@prisma/client"
 import {cache, prisma} from "@root/db"
-import {getCache} from "@utils/cacheHelper"
+import {getCache, setCache} from "@utils/cacheHelper"
 
 export const fetchShortcutForUser = async (
 	shortlink: string,
@@ -24,7 +24,7 @@ export const fetchShortcutForUser = async (
 	})
 
 	if (shortcutData) {
-		await cache.set(
+		await setCache(
 			cachedKey,
 			JSON.stringify(shortcutData?.Shortcut),
 			"EX",

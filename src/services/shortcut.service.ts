@@ -1,6 +1,6 @@
 import {AccessList, Shortcut} from "@prisma/client"
 import {cache, prisma} from "@root/db"
-import {getCache, unlinkKeys} from "@utils/cacheHelper"
+import {getCache, setCache, unlinkKeys} from "@utils/cacheHelper"
 
 export const createShortcut = async (
 	shortlink: string,
@@ -47,7 +47,7 @@ export const fetchShotcutById = async (
 		},
 	})
 
-	await cache.set(cacheKey, JSON.stringify(shortcut), "EX", 60 * 10, "NX")
+	await setCache(cacheKey, JSON.stringify(shortcut), "EX", 60 * 10, "NX")
 
 	return shortcut
 }
