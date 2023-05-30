@@ -33,7 +33,7 @@ export const userLoginSchema = object({
 			message: "Not a valid email address",
 		}),
 		password: string({
-			required_error: "Please enter a valid email",
+			required_error: "Please enter a valid password",
 		}).min(8, {
 			message: "password should atleast be 8 charachters  long",
 		}),
