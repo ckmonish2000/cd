@@ -89,9 +89,32 @@ describe('Shortcut Routes', () => {
          })
     })
 
-    // describe('Get shortcuts', () => { 
+    describe('Get shortcuts', () => { 
+        describe('Given authorized user',() => { 
+            it("Should return 200",async()=>{
+                const fetchShotcutById = jest.spyOn(shortcutService,"fetchAllUserShortcuts")
+                
+                fetchShotcutById.mockResolvedValue([{
+                        ...shortcut,
+                        userId:uuidv4()
+                    }])
 
-    // })
+                const res = await supertest(app).get("/api/shortcut")
+                .set("Cookie",cookie)
+                
+                expect(Array.isArray(res.body)).toBe(true)
+                expect(res.statusCode).toBe(200)
+            })
+        })
+
+        describe('Given unauthorized user', () => { 
+            it("Should return 401",async()=>{
+                const res = await supertest(app).get("/api/shortcut")
+                
+                expect(res.statusCode).toBe(401)
+            })
+         })
+    })
 
     // describe('Update shortcut', () => { 
 
