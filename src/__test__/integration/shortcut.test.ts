@@ -99,7 +99,8 @@ describe('Shortcut Routes', () => {
                         userId:uuidv4()
                     }])
 
-                const res = await supertest(app).get("/api/shortcut")
+                const res = await supertest(app)
+                .get("/api/shortcut")
                 .set("Cookie",cookie)
                 
                 expect(Array.isArray(res.body)).toBe(true)
@@ -120,7 +121,45 @@ describe('Shortcut Routes', () => {
 
     // })
 
-    // describe('Delete shortcut', () => { 
-    
-    // })
+    describe('Delete shortcut', () => { 
+        
+        describe('Given invalid route', () => { 
+            it.only("Should return 404",async ()=>{
+
+                const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
+
+                fetchShotcutById.mockResolvedValue(null)
+
+                const res = await supertest(app)
+                .delete(`/api/shortcut/${shortcut.shortlink}`)
+                .set("Cookie",cookie)
+
+                console.log(res.error)
+                expect(res.statusCode).toBe(404)
+            })
+         })
+
+         describe('Given valid route', () => { 
+            it("Should return 200",async ()=>{
+                const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
+                const deleteShortcut = jest.spyOn(shortcutService,"deleteShortcut")
+
+                fetchShotcutById.mockResolvedValue({
+                    userId:uuidv4(),
+                    ...shortcut
+                })
+
+                deleteShortcut.mockResolvedValue({
+                    userId:uuidv4(),
+                    ...shortcut
+                })
+
+                const res = await supertest(app)
+                .delete(`/api/shortcut/${shortcut.shortlink}`)
+                .set("Cookie",cookie)
+
+                expect(res.statusCode).toBe(200)
+            })
+         })
+    })
 })
