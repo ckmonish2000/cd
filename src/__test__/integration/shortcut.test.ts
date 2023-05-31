@@ -2,6 +2,7 @@ import createServer from "@utils/server"
 import supertest from "supertest"
 import * as shortcutService from "@services/shortcut.service"
 import { primaryUser, shortcut } from "./mock"
+import { v4 as uuidv4 } from 'uuid';
 
 const app = createServer()
 let cookie:string[]
@@ -39,7 +40,7 @@ describe('Shortcut Routes', () => {
         })
 
         describe("Given invalid body",()=>{
-            it.only("Should return 400",async()=>{
+            it("Should return 400",async()=>{
 
                 const missingUrl = await supertest(app).post("/api/shortcut")
                 .set("Cookie",cookie)
@@ -66,6 +67,26 @@ describe('Shortcut Routes', () => {
                 expect(emptyBody.statusCode).toBe(400)
             })
         })
+
+        describe('Given already existing shortcut', () => { 
+            it("Should return 409",async()=>{
+                const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
+    
+                fetchShotcutById.mockResolvedValue({
+                    ...shortcut,
+                    userId:uuidv4()
+                })
+    
+                const res = await supertest(app).post("/api/shortcut")
+                .set("Cookie",cookie)
+                .send({
+                    shortlink:shortcut.shortlink,
+                    url:shortcut.url
+                })
+    
+                expect(res.statusCode).toBe(409)
+            })
+         })
     })
 
     // describe('Get shortcuts', () => { 
