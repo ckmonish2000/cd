@@ -117,14 +117,67 @@ describe('Shortcut Routes', () => {
          })
     })
 
-    // describe('Update shortcut', () => { 
+    describe('Update shortcut', () => { 
+        describe('Given valid body', () => { 
+            it("Should return 200",async ()=>{
+                const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
+                const updateShortcut = jest.spyOn(shortcutService,"updateShortcut")
 
-    // })
+                fetchShotcutById.mockResolvedValue({
+                    userId:uuidv4(),
+                    ...shortcut
+                })
+
+                updateShortcut.mockResolvedValue({
+                    ...shortcut,
+                    userAccessList:[],
+                    userId:uuidv4(),
+                    shortlink:"https://go.dev",
+                })
+
+                const res = await supertest(app)
+                .put(`/api/shortcut`)
+                .set("Cookie",cookie)
+                .send({
+                    shortlink:shortcut.shortlink,
+                    data:{
+                    url:"https://go.dev"
+                    }
+                })
+
+                expect(res.statusCode).toBe(200)
+            })
+         })
+
+         describe('Given invalid route', () => { 
+            it.only("Should return 404",async ()=>{
+
+                const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
+
+                fetchShotcutById.mockResolvedValue(null)
+
+                const res = await supertest(app)
+                .put(`/api/shortcut`)
+                .set("Cookie",cookie)
+                .send({
+                    shortlink:shortcut.shortlink,
+                    data:{
+                    url:"https://go.dev"
+                    }
+                })
+
+                console.log(res.error)
+                expect(res.statusCode).toBe(404)
+            })
+         })
+
+         
+    })
 
     describe('Delete shortcut', () => { 
         
         describe('Given invalid route', () => { 
-            it.only("Should return 404",async ()=>{
+            it("Should return 404",async ()=>{
 
                 const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
 
