@@ -40,10 +40,8 @@ describe('Redirect route', () => {
                 updatedAt: new Date(),
             })
     
-            const res = await supertest(app).get("/api/gom").set("Cookie",cookie).send({
-                shortcut:"gom"
-            })
-    
+            const res = await supertest(app).get("/api/gom").set("Cookie",cookie)
+            
             expect(res.statusCode).toBe(302)
             expect(res.text).toBe("Found. Redirecting to https://google.com")
         })
@@ -59,22 +57,22 @@ describe('Redirect route', () => {
     
             fetchShortcutForUser.mockResolvedValue(null)
     
-            const res = await supertest(app).get("/api/goz").set("Cookie",cookie).send({
-                shortcut:"goz"
-            })
-    
+            const res = await supertest(app).get("/api/goz").set("Cookie",cookie)
             expect(res.statusCode).toBe(404)
             expect(addAnalyticLog.mock.calls.length).toBe(0)
         })
       })
 
-      describe('Given invalid body', () => { 
-        it.only("should return 400",async()=>{
-            const res = await supertest(app).get("/api/go").set("Cookie",cookie).send({
-                shortcut:"go"
+      describe('Given invalid param', () => {
+       
+        describe('Given short route param', () => { 
+            it("should return 400",async ()=>{
+                const res = await supertest(app).get("/api/g").set("Cookie",cookie)
+
+                expect(res.body.length).toBe(1)
+                expect(res.body[0].message).toBe("shortcut should atleas be 2 char long")
+                expect(res.statusCode).toBe(400)
             })
-    
-            expect(res.statusCode).toBe(404)
         })
-       })
+      })
  })
