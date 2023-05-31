@@ -13,7 +13,7 @@ export const redirectToShortcut = async (
 	const {shortcut} = req.params
 
 	const redirectionData = await fetchShortcutForUser(shortcut, userId)
-
+	
 	if (!redirectionData) {
 		throw new AppError(
 			"cd404",

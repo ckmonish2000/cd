@@ -28,7 +28,7 @@ export const createShortcutHandler = async (
 
 	const newShortcut = await createShortcut(shortlink, url, userId)
 
-	return res.status(200).json(newShortcut)
+	return res.status(201).json(newShortcut)
 }
 
 export const updateShortcutHandler = async (
