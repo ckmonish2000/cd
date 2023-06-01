@@ -166,7 +166,6 @@ describe('Shortcut Routes', () => {
                     }
                 })
 
-                console.log(res.error)
                 expect(res.statusCode).toBe(404)
             })
          })
@@ -187,7 +186,6 @@ describe('Shortcut Routes', () => {
                 .delete(`/api/shortcut/${shortcut.shortlink}`)
                 .set("Cookie",cookie)
 
-                console.log(res.error)
                 expect(res.statusCode).toBe(404)
             })
          })

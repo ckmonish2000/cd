@@ -14,7 +14,6 @@ beforeAll(async()=>{
 })
 
 describe('Analytics route', () => { 
-    
     describe('Given valid route param', () => { 
 
         it("should return 200",async()=>{
@@ -45,5 +44,21 @@ describe('Analytics route', () => {
             expect(res.statusCode).toBe(200)
         })
 
-     })
+    })
+
+    describe('Given valid route param', () => { 
+
+        it("should return 404",async()=>{
+            const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
+            fetchShotcutById.mockResolvedValue(null)
+
+            const res = await supertest(app)
+            .get(`/api/analytics/xxx`)
+            .set("Cookie",cookie)
+
+            expect(Array.isArray(res.body)).toBe(false)
+            expect(res.statusCode).toBe(404)
+        })
+
+    })
  })
