@@ -150,7 +150,7 @@ describe('Shortcut Routes', () => {
          })
 
          describe('Given invalid route', () => { 
-            it.only("Should return 404",async ()=>{
+            it("Should return 404",async ()=>{
 
                 const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
 
