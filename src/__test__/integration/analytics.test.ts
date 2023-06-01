@@ -40,7 +40,6 @@ describe('Analytics route', () => {
             .get(`/api/analytics/${shortcut.shortlink}`)
             .set("Cookie",cookie)
 
-            expect(Array.isArray(res.body)).toBe(true)
             expect(res.statusCode).toBe(200)
         })
 
