@@ -1,5 +1,6 @@
 import createServer from "@utils/server"
 import supertest from "supertest"
+import * as userService from "@services/user.service"
 import * as analyticsService from "@services/analytics.service"
 import * as shortcutService from "@services/shortcut.service"
 import { v4 as uuidv4 } from 'uuid';
@@ -17,8 +18,16 @@ describe('Analytics route', () => {
     describe('Given valid route param', () => { 
 
         it("should return 200",async()=>{
+            const fetchUserById = jest.spyOn(userService,"fetchUserById")
             const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
             const fetchAllLogsForShortcut = jest.spyOn(analyticsService,"fetchAllLogsForShortcut")
+
+            
+            fetchUserById.mockResolvedValue({
+                id:uuidv4(),
+                email:primaryUser.email,
+                password:primaryUser.password
+            })
 
             fetchShotcutById.mockResolvedValue({
                 userId: uuidv4(),
@@ -48,7 +57,15 @@ describe('Analytics route', () => {
     describe('Given valid route param', () => { 
 
         it("should return 404",async()=>{
+            const fetchUserById = jest.spyOn(userService,"fetchUserById")
             const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
+            
+            fetchUserById.mockResolvedValue({
+                id:uuidv4(),
+                email:primaryUser.email,
+                password:primaryUser.password
+            })
+
             fetchShotcutById.mockResolvedValue(null)
 
             const res = await supertest(app)
