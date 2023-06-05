@@ -1,34 +1,40 @@
-import { AccessList } from "@prisma/client"
+import {AccessList} from "@prisma/client"
 import {cache, prisma} from "@root/db"
-import { getCache, unlinkKeys } from "@utils/cacheHelper"
+import {getCache, setCache, unlinkKeys} from "@utils/cacheHelper"
 
-export const addUserToAccessList = async(ownerId:string,userId:string,shortlink:string):Promise<AccessList>=>{
+export const addUserToAccessList = async (
+	ownerId: string,
+	userId: string,
+	shortlink: string
+): Promise<AccessList> => {
 	const memberData = await prisma.accessList.create({
-		data:{
-			userId:userId,
-			shortcutShortlink:shortlink,
-			shortcutUserId:ownerId
+		data: {
+			userId: userId,
+			shortcutShortlink: shortlink,
+			shortcutUserId: ownerId,
 		},
-		include:{
-			Shortcut:true
-		}
+		include: {
+			Shortcut: true,
+		},
 	})
 
 	const cachedKey = `redirect-${shortlink}-${userId}`
-	await cache.set(cachedKey,JSON.stringify(memberData.Shortcut),"EX",5*60)
+	await setCache(cachedKey, JSON.stringify(memberData.Shortcut), "EX", 5 * 60)
 
 	return memberData
 }
 
-export const removeUserFromAccessList = async (id:string):Promise<AccessList>=>{
+export const removeUserFromAccessList = async (
+	id: string
+): Promise<AccessList> => {
 	const revokedMemberData = await prisma.accessList.delete({
-		where:{
-			id:id
+		where: {
+			id: id,
 		},
-		include:{
-			Shortcut:true,
-			User:true
-		}
+		include: {
+			Shortcut: true,
+			User: true,
+		},
 	})
 
 	const shortlink = revokedMemberData.shortcutShortlink
@@ -40,27 +46,30 @@ export const removeUserFromAccessList = async (id:string):Promise<AccessList>=>{
 	return revokedMemberData
 }
 
-
-export const fetchAccessListForUrl = async (ownerId:string,shortlink:string):Promise<AccessList[]>=>{
+export const fetchAccessListForUrl = async (
+	ownerId: string,
+	shortlink: string
+): Promise<AccessList[]> => {
 	const accessList = await prisma.accessList.findMany({
-		where:{
-			shortcutUserId:ownerId,
-			shortcutShortlink:shortlink
-		}
+		where: {
+			shortcutUserId: ownerId,
+			shortcutShortlink: shortlink,
+		},
 	})
 
 	return accessList
 }
 
-
-export const fetchAccessListById =async (id:string):Promise<AccessList | null>=>{
+export const fetchAccessListById = async (
+	id: string
+): Promise<AccessList | null> => {
 	const data = await prisma.accessList.findUnique({
-		where:{
-			id:id
+		where: {
+			id: id,
 		},
-		include:{
-			Shortcut:true
-		}
+		include: {
+			Shortcut: true,
+		},
 	})
 
 	return data
