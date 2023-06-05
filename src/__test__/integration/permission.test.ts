@@ -67,4 +67,78 @@ describe('Permission Route', () => {
             expect(res.statusCode).toBe(201)
         })
      })
+
+
+     describe('Remove user from access list', () => {
+        it("should return 200",async()=>{
+            const userId = uuidv4()
+            const shortcutAccessId = uuidv4()
+
+            const fetchUserById = jest.spyOn(userService,"fetchUserById")
+            const fetchAccessListById = jest.spyOn(permissionServices,"fetchAccessListById")
+            const removeUserFromAccessList =  jest.spyOn(permissionServices,"removeUserFromAccessList")
+
+            fetchUserById.mockResolvedValue({
+                id:ownerId,
+                email:primaryUser.email,
+                password:primaryUser.password
+            })
+
+            fetchAccessListById.mockResolvedValue({
+                id:uuidv4(),
+                shortcutShortlink:shortcut.url,
+                shortcutUserId:ownerId,
+                userId:userId
+            })
+
+            removeUserFromAccessList.mockResolvedValue({
+                id:shortcutAccessId,
+                shortcutShortlink:shortcut.url,
+                shortcutUserId:ownerId,
+                userId:userId
+            })
+
+            const res = await supertest(app)
+            .delete(`/api/permission/${shortcutAccessId}`)
+            .set("Cookie",cookie)
+
+            expect(res.statusCode).toBe(200)
+        })
+     })
+
+     describe('Get current user\'s access list', () => {
+        it("should return 200",async()=>{
+            const userId = uuidv4()
+
+            const fetchUserById = jest.spyOn(userService,"fetchUserById")
+            const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
+            const fetchAccessListForUrl = jest.spyOn(permissionServices,"fetchAccessListForUrl")
+
+            fetchUserById.mockResolvedValue({
+                id:ownerId,
+                email:primaryUser.email,
+                password:primaryUser.password
+            })
+
+            fetchShotcutById.mockResolvedValue({
+                ...shortcut,
+                userId:ownerId
+            })
+
+            fetchAccessListForUrl.mockResolvedValue([
+                {
+                    "id": uuidv4(),
+                    "userId": userId,
+                    "shortcutShortlink": shortcut.shortlink,
+                    "shortcutUserId": ownerId
+                }
+            ])
+           
+            const res = await supertest(app)
+            .get(`/api/permission/${shortcut.shortlink}`)
+            .set("Cookie",cookie)
+
+            expect(res.statusCode).toBe(200)
+        })
+     })
  })
