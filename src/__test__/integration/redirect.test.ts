@@ -1,6 +1,7 @@
 import createServer from "@utils/server"
 import supertest from "supertest"
 import { primaryUser, shortcut } from "./mock"
+import * as userService from "@services/user.service"
 import * as cachUtil from "@utils/cacheHelper"
 import * as redirectService from "@services/redirect.service"
 import * as analyticsService from "@services/analytics.service"
@@ -20,8 +21,15 @@ describe('Redirect route', () => {
             const userId = uuidv4()
             const setCache = jest.spyOn(cachUtil,"setCache")
             const getCache = jest.spyOn(cachUtil,"getCache")
+            const fetchUserById = jest.spyOn(userService,"fetchUserById")
             const fetchShortcutForUser = jest.spyOn(redirectService,"fetchShortcutForUser")
             const addAnalyticLog = jest.spyOn(analyticsService,"addAnalyticLog")
+
+                fetchUserById.mockResolvedValue({
+                    id:uuidv4(),
+                    email:primaryUser.email,
+                    password:primaryUser.password
+                })
     
             getCache.mockResolvedValue(null)
             setCache.mockResolvedValue("OK")
@@ -50,9 +58,15 @@ describe('Redirect route', () => {
      describe('Given invalid route', () => { 
         it("should return 404",async()=>{
             const getCache = jest.spyOn(cachUtil,"getCache")
+            const fetchUserById = jest.spyOn(userService,"fetchUserById")
             const fetchShortcutForUser = jest.spyOn(redirectService,"fetchShortcutForUser")
             const addAnalyticLog = jest.spyOn(analyticsService,"addAnalyticLog")
-    
+            
+                fetchUserById.mockResolvedValue({
+                    id:uuidv4(),
+                    email:primaryUser.email,
+                    password:primaryUser.password
+                })
             getCache.mockResolvedValue(null)
     
             fetchShortcutForUser.mockResolvedValue(null)
@@ -67,6 +81,12 @@ describe('Redirect route', () => {
        
         describe('Given short route param', () => { 
             it("should return 400",async ()=>{
+                const fetchUserById = jest.spyOn(userService,"fetchUserById")
+                fetchUserById.mockResolvedValue({
+                    id:uuidv4(),
+                    email:primaryUser.email,
+                    password:primaryUser.password
+                })
                 const res = await supertest(app).get("/api/g").set("Cookie",cookie)
 
                 expect(res.body.length).toBe(1)
