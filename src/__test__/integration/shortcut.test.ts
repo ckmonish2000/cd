@@ -1,5 +1,6 @@
 import createServer from "@utils/server"
 import supertest from "supertest"
+import * as userService from "@services/user.service"
 import * as shortcutService from "@services/shortcut.service"
 import { primaryUser, shortcut } from "./mock"
 import { v4 as uuidv4 } from 'uuid';
@@ -17,8 +18,15 @@ describe('Shortcut Routes', () => {
 
         describe("Given valid body",()=>{
             it("Should return 201",async()=>{
+                const fetchUserById = jest.spyOn(userService,"fetchUserById")
                 const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
                 const createShortcut = jest.spyOn(shortcutService,"createShortcut")
+
+                fetchUserById.mockResolvedValue({
+                    id:uuidv4(),
+                    email:primaryUser.email,
+                    password:primaryUser.password
+                })
     
                 fetchShotcutById.mockResolvedValue(null)
                 createShortcut.mockResolvedValue(shortcut)
@@ -41,6 +49,13 @@ describe('Shortcut Routes', () => {
 
         describe("Given invalid body",()=>{
             it("Should return 400",async()=>{
+                const fetchUserById = jest.spyOn(userService,"fetchUserById")
+                
+                fetchUserById.mockResolvedValue({
+                    id:uuidv4(),
+                    email:primaryUser.email,
+                    password:primaryUser.password
+                })
 
                 const missingUrl = await supertest(app).post("/api/shortcut")
                 .set("Cookie",cookie)
@@ -71,6 +86,13 @@ describe('Shortcut Routes', () => {
         describe('Given already existing shortcut', () => { 
             it("Should return 409",async()=>{
                 const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
+                const fetchUserById = jest.spyOn(userService,"fetchUserById")
+
+                fetchUserById.mockResolvedValue({
+                    id:uuidv4(),
+                    email:primaryUser.email,
+                    password:primaryUser.password
+                })
     
                 fetchShotcutById.mockResolvedValue({
                     ...shortcut,
@@ -92,8 +114,15 @@ describe('Shortcut Routes', () => {
     describe('Get shortcuts', () => { 
         describe('Given authorized user',() => { 
             it("Should return 200",async()=>{
-                const fetchShotcutById = jest.spyOn(shortcutService,"fetchAllUserShortcuts")
-                
+            const fetchShotcutById = jest.spyOn(shortcutService,"fetchAllUserShortcuts")
+            const fetchUserById = jest.spyOn(userService,"fetchUserById")
+
+            fetchUserById.mockResolvedValue({
+                id:uuidv4(),
+                email:primaryUser.email,
+                password:primaryUser.password
+            })
+
                 fetchShotcutById.mockResolvedValue([{
                         ...shortcut,
                         userId:uuidv4()
@@ -120,8 +149,15 @@ describe('Shortcut Routes', () => {
     describe('Update shortcut', () => { 
         describe('Given valid body', () => { 
             it("Should return 200",async ()=>{
+                const fetchUserById = jest.spyOn(userService,"fetchUserById")
                 const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
                 const updateShortcut = jest.spyOn(shortcutService,"updateShortcut")
+
+                fetchUserById.mockResolvedValue({
+                    id:uuidv4(),
+                    email:primaryUser.email,
+                    password:primaryUser.password
+                })
 
                 fetchShotcutById.mockResolvedValue({
                     userId:uuidv4(),
@@ -151,8 +187,14 @@ describe('Shortcut Routes', () => {
 
          describe('Given invalid route', () => { 
             it("Should return 404",async ()=>{
-
+                const fetchUserById = jest.spyOn(userService,"fetchUserById")
                 const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
+                
+                fetchUserById.mockResolvedValue({
+                    id:uuidv4(),
+                    email:primaryUser.email,
+                    password:primaryUser.password
+                })
 
                 fetchShotcutById.mockResolvedValue(null)
 
@@ -178,7 +220,14 @@ describe('Shortcut Routes', () => {
         describe('Given invalid route', () => { 
             it("Should return 404",async ()=>{
 
+                const fetchUserById = jest.spyOn(userService,"fetchUserById")
                 const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
+
+                fetchUserById.mockResolvedValue({
+                    id:uuidv4(),
+                    email:primaryUser.email,
+                    password:primaryUser.password
+                })
 
                 fetchShotcutById.mockResolvedValue(null)
 
@@ -192,8 +241,15 @@ describe('Shortcut Routes', () => {
 
          describe('Given valid route', () => { 
             it("Should return 200",async ()=>{
+                const fetchUserById = jest.spyOn(userService,"fetchUserById")
                 const fetchShotcutById = jest.spyOn(shortcutService,"fetchShotcutById")
                 const deleteShortcut = jest.spyOn(shortcutService,"deleteShortcut")
+
+                fetchUserById.mockResolvedValue({
+                    id:uuidv4(),
+                    email:primaryUser.email,
+                    password:primaryUser.password
+                })
 
                 fetchShotcutById.mockResolvedValue({
                     userId:uuidv4(),

@@ -6,6 +6,7 @@ module.exports = {
   verbose: true,
   forceExit: true,
   clearMocks: true,
+  restoreMocks: true,
   moduleNameMapper: {
     '^@services/(.*)$': '<rootDir>/src/services/$1',
     '^@utils/(.*)$': '<rootDir>/src/utils/$1',
