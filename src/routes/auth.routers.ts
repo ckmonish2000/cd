@@ -12,6 +12,18 @@ import authorizationMiddleware from "@middleware/authorizationMiddleware"
 
 const router = Router()
 
+/**
+ * @openapi
+ * /api/register:
+ *  post:
+ *   summary: Register user
+ *   description: Add a new user entry 
+ *   tags:
+ *    - Auth
+ *   responses:
+ *    201:
+ *     description: should return the ID of the newly created user
+ */
 router.post(
 	"/api/register",
 	validateResource(registerUserSchema),

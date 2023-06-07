@@ -18,7 +18,6 @@ const router = Router()
    *    200:
    *     description: app is running
    */	 
-
 router.get("/heartbeat", (req: Request, res: Response) => {
 	res.sendStatus(200)
 })
