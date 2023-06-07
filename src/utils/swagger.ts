@@ -13,7 +13,7 @@ const swaggerOptions: swaggerJsdoc.Options = {
         },
         servers:[{url:"https://localhost:3000"}],
     },
-    apis: ["./src/routes/index.ts", "./src/schemas/*.ts"],
+    apis: ["./src/routes/*.ts", "./src/schemas/*.ts"],
 }
 
 const swaggerSpecs = swaggerJsdoc(swaggerOptions)
