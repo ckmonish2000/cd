@@ -29,11 +29,37 @@ router.post(
 	validateResource(registerUserSchema),
 	tryCatch(registerUserHandler)
 )
+
+/**
+ * @openapi
+ * /api/login:
+ *  post:
+ *   summary: User login
+ *   description: Verify user
+ *   tags:
+ *    - Auth
+ *   responses:
+ *    200:
+ *     description: should return welcome to CD with 200 status code
+ */
 router.post(
 	"/api/login",
 	validateResource(userLoginSchema),
 	tryCatch(userLoginHandler)
 )
+
+/**
+ * @openapi
+ * /api/logout:
+ *  post:
+ *   summary: User logout
+ *   description: destroy user cookies
+ *   tags:
+ *    - Auth
+ *   responses:
+ *    200:
+ *     description: should return visit again with 200 status code
+ */
 router.post("/api/logout", authorizationMiddleware, tryCatch(userLogoutHandler))
 
 export default router
