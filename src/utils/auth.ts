@@ -1,6 +1,11 @@
 import bcrypt from "bcrypt"
 import logger from "./logger"
 
+/**
+ * 
+ * @param password 
+ * @returns {Promise<string|undefined>}
+ */
 export const hashPassword = async (
 	password: string
 ): Promise<string | undefined> => {
@@ -14,6 +19,12 @@ export const hashPassword = async (
 	}
 }
 
+/**
+ * 
+ * @param inputPassword 
+ * @param hashedPassword 
+ * @returns {Promise<boolean>}
+ */
 export const validatePassword = async (
 	inputPassword: string,
 	hashedPassword: string

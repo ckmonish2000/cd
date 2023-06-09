@@ -20,9 +20,19 @@ const router = Router()
  *   description: Add a new user entry 
  *   tags:
  *    - Auth
+ *   parameters:
+ *    - in: body
+ *      name: user
+ *      description: The user to create.
+ *      schema:
+ *       $ref: '#/components/schemas/RegisterUserSchema'
  *   responses:
  *    201:
  *     description: should return the ID of the newly created user
+ *    409:
+ *     description: This entry alreay exists
+ *    400:
+ *     description: Client side error
  */
 router.post(
 	"/api/register",
