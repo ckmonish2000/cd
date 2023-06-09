@@ -1,5 +1,26 @@
 import {object, string, TypeOf} from "zod"
 
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *   RegisterUserSchema:
+ *    type: object
+ *    required:
+ *     - email
+ *     - password
+ *     - confirmPassword
+ *    properties:
+ *     email:
+ *      type: string
+ *      default: ckmonish2000@gmail.com
+ *     password:
+ *      type: string
+ *      default: admin@123
+ *     confirmPassword:
+ *      type: string
+ *      default: admin@123
+ */
 export const registerUserSchema = object({
 	body: object({
 		email: string({
