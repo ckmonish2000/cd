@@ -7,6 +7,27 @@ import {Router} from "express"
 
 const router = Router()
 
+
+/**
+ * @openapi
+ * /api/shortcut:
+ *  get:
+ *   tags:
+ *    - Redirect
+ *   summary: Redirect to original URL
+ *   parameters:
+ *    - in: path
+ *      schema: 
+ *       $ref: '#/components/schemas/RedirectSchema'
+ *      name: shortcut
+ *      required: true
+ *      default: go
+ *   responses:
+ *    201:
+ *     description: should return the ID of the newly created user
+ *    409:
+ *     description: This entry alreay exists
+ */
 router.get(
 	"/api/:shortcut",
 	authorizationMiddleware,

@@ -1,5 +1,17 @@
 import {TypeOf, object, string} from "zod"
 
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *   RedirectSchema:
+ *    required:
+ *     - shortcut
+ *   properties:
+ *    shortcut:
+ *     type: string
+ *     default: google
+ */
 export const redirectInputSchema = object({
 	params: object({
 		shortcut: string({
