@@ -44,10 +44,16 @@ router.post(
  * @openapi
  * /api/login:
  *  post:
- *   summary: User login
- *   description: Verify user
  *   tags:
  *    - Auth
+ *   summary: User login
+ *   description: Verify user
+ *   requestBody:
+ *    content:
+ *     application/json:
+ *      schema:
+ *       $ref: '#/components/schemas/UserLoginSchema'
+ *    required: true 
  *   responses:
  *    200:
  *     description: should return welcome to CD with 200 status code
