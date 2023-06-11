@@ -13,18 +13,79 @@ import {Router} from "express"
 
 const router = Router()
 
+/**
+ * @openapi
+ * /api/permission:
+ *  post:
+ *   tags:
+ *    - Permission
+ *   summary: Provide another user permission
+ *   description: Provide another user permission to shortcuts you own
+ *   requestBody:
+ *    content:
+ *     application/json:
+ *      schema:
+ *       $ref: '#/components/schemas/CreatePermissionSchema'
+ *    required: true
+ *   responses:
+ *    201:
+ *     description: Should return new permission id
+ *    404:
+ *     description: User not found
+ */
 router.post(
 	"/api/permission",
 	authorizationMiddleware,
 	validateResource(createPermissionInputSchema),
 	tryCatch(addUserToAccessListHandler)
 )
+
+/**
+ * @openapi
+ * /api/permission/:accessListId:
+ *  delete:
+ *   tags:
+ *    - Permission
+ *   summary: Revoke user permission
+ *   description: Revoke user permission to shortcuts you own
+ *   parameters:
+ *   - in: path
+ *     schema:
+ *      $ref: '#/components/schemas/RevokePermissionSchema'
+ *      name: uuid
+ *      required: true
+ *   responses:
+ *    201:
+ *     description: Should return new permission id
+ *    404:
+ *     description: User not found
+ */
 router.delete(
 	"/api/permission/:accessListId",
 	authorizationMiddleware,
 	validateResource(revokePermissionInputSchema),
 	tryCatch(revokeUserToAccessListHandler)
 )
+
+/**
+ * @openapi
+ * /api/permission/:shortlink:
+ *  get:
+ *   tags:
+ *    - Permission
+ *   summary: Get all users who have access to a link
+ *   description: Get all users who have access to a link can be used only by the owner of the shortcut.
+ *   parameters:
+ *   - in: path
+ *     schema:
+ *      $ref: '#/components/schemas/AccessListForUrlSchema'
+ *      required: true
+ *   responses:
+ *    201:
+ *     description: Should return array of user id
+ *    404:
+ *     description: User not found
+ */
 router.get(
 	"/api/permission/:shortlink",
 	authorizationMiddleware,
