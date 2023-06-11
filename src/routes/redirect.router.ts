@@ -25,8 +25,8 @@ const router = Router()
  *   responses:
  *    201:
  *     description: should return the ID of the newly created user
- *    409:
- *     description: This entry alreay exists
+ *    400:
+ *     description: shortcut not found
  */
 router.get(
 	"/api/:shortcut",
