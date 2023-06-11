@@ -1,5 +1,22 @@
 import {object, string, TypeOf} from "zod"
 
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *   CreateShortcutSchema:
+ *    type: object
+ *    required: 
+ *     - shortlink
+ *     - url
+ *    properties:
+ *     shortlink:
+ *      type: string
+ *      default: google
+ *     url:
+ *      type: string
+ *      default: https://www.google.com
+ */
 export const createShortcutSchema = object({
 	body: object({
 		shortlink: string({
@@ -14,6 +31,34 @@ export const createShortcutSchema = object({
 		}),
 	}),
 })
+
+
+
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *   UpdateShortcutSchema:
+ *    type: object
+ *    required: 
+ *     - shortlink
+ *     - data
+ *    properties:
+ *     shortlink:
+ *      type: string
+ *      default: google
+ *     data:
+ *      type: object
+ *      properties:
+ *       url:
+ *        type: string
+ *        required: true
+ *        default: https://www.google.com 
+ *       shortlink:
+ *        type: string
+ *        required: true
+ *        default: google
+ */
 
 export const updateShortcutSchema = object({
 	body: object({
@@ -37,6 +82,20 @@ export const updateShortcutSchema = object({
 	}),
 })
 
+
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *   DeleteShortcutSchema:
+ *    type: string
+ *    required:
+ *     - shortlink
+ *    properties:
+ *     shortlink:
+ *      type: string
+ *      default: google
+ */
 export const deleteShortcutSchema = object({
 	params: object({
 		shortlink: string({
