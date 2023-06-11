@@ -5,12 +5,13 @@ import {TypeOf, object, string} from "zod"
  * components:
  *  schemas:
  *   RedirectSchema:
- *    required:
+ *    type: string
+ *    required: 
  *     - shortcut
- *   properties:
- *    shortcut:
- *     type: string
- *     default: google
+ *    properties:
+ *     shortcut:
+ *      type: string
+ *      default: go
  */
 export const redirectInputSchema = object({
 	params: object({
