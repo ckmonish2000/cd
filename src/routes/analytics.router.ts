@@ -7,6 +7,18 @@ import {Router} from "express"
 
 const router = Router()
 
+/**
+ * @openapi
+ * /api/analytics/:shortcut:
+ *  get:
+ *   tags:
+ *    - Analytics
+ *   parameters:
+ *    - in: path
+ *      schema:
+ *       $ref: '#/components/schemas/FetchAnalyticsSchema'
+ *      name: shortcut
+ */
 router.get(
 	"/api/analytics/:shortcut",
 	authorizationMiddleware,
