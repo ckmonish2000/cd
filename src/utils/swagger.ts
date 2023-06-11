@@ -11,7 +11,7 @@ const swaggerOptions: swaggerJsdoc.Options = {
             version:"1.0.0",
             description:"Documentation for project cd"
         },
-        servers:[{url:"https://localhost:3000"}],
+        servers:[{url:"http://localhost:3000"}],
     },
     apis: ["./src/routes/*.ts", "./src/schemas/*.ts"],
 }

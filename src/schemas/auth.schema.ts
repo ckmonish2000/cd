@@ -13,7 +13,7 @@ import {object, string, TypeOf} from "zod"
  *    properties:
  *     email:
  *      type: string
- *      default: ckmonish2000@gmail.com
+ *      default: ckmonish3000@gmail.com
  *     password:
  *      type: string
  *      default: admin@123

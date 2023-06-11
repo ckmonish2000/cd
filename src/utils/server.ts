@@ -19,7 +19,9 @@ declare module "express-session" {
 function createServer(): Express {
 	const app = express()
 	const sessionSecret = Buffer.from(config.get("privateKey")).toString("ascii")
+	
 	app.use(cors())
+
 	app.use(express.json())
 
 	app.use(cookieParser())

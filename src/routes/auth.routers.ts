@@ -16,16 +16,16 @@ const router = Router()
  * @openapi
  * /api/register:
  *  post:
- *   summary: Register user
- *   description: Add a new user entry 
  *   tags:
  *    - Auth
- *   parameters:
- *    - in: body
- *      name: user
- *      description: The user to create.
+ *   summary: Register user
+ *   description: Add a new user entry 
+ *   requestBody:
+ *    content:
+ *     application/json:
  *      schema:
  *       $ref: '#/components/schemas/RegisterUserSchema'
+ *    required: true
  *   responses:
  *    201:
  *     description: should return the ID of the newly created user
