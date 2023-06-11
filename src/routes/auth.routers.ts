@@ -75,6 +75,8 @@ router.post(
  *   responses:
  *    200:
  *     description: should return visit again with 200 status code
+ *    401:
+ *     description: Unauthorized could not find user with the given email and password
  */
 router.post("/api/logout", authorizationMiddleware, tryCatch(userLogoutHandler))
 
