@@ -46,6 +46,24 @@ export const registerUserSchema = object({
 	),
 })
 
+
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *   UserLoginSchema:
+ *    type: object
+ *    required: 
+ *     - email
+ *     - password
+ *    properties:
+ *     email:
+ *      type: string
+ *      default: ckmonish3000@gmail.com
+ *     password:
+ *      type: string
+ *      default: admin@123 
+ */
 export const userLoginSchema = object({
 	body: object({
 		email: string({
