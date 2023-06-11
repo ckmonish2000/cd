@@ -1,5 +1,22 @@
 import {TypeOf, object, string} from "zod"
 
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *   CreatePermissionSchema:
+ *    type: object
+ *    required:
+ *     - userId
+ *     - shortlink
+ *    properties:
+ *     userId:
+ *      type: string
+ *      description: uuid
+ *     shortlink:
+ *      type: string
+ *      default: google
+ */
 export const createPermissionInputSchema = object({
 	body: object({
 		userId: string({
@@ -15,6 +32,17 @@ export const createPermissionInputSchema = object({
 	}),
 })
 
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *   RevokePermissionSchema:
+ *    type: string
+ *    properties:
+ *     accessListId:
+ *      type: string
+ *      description: uuid
+ */
 export const revokePermissionInputSchema = object({
 	params: object({
 		accessListId: string({
@@ -23,6 +51,19 @@ export const revokePermissionInputSchema = object({
 	}),
 })
 
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *   AccessListForUrlSchema:
+ *    type: string
+ *    required:
+ *     - shortlink
+ *    properties:
+ *     shortlink:
+ *      type: string
+ *      default: google
+ */
 export const fetchAccessListForUrlInputSchema = object({
 	params: object({
 		shortlink: string({
