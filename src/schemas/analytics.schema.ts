@@ -1,5 +1,15 @@
 import {TypeOf, object, string} from "zod"
 
+/**
+ * @openapi
+ * components:
+ *  schemas:
+ *   FetchAnalyticsSchema:
+ *    type: string
+ *    required: 
+ *     - shortcut
+ *    default: google
+ */
 export const fetchAnalyticsInputSchema = object({
 	params: object({
 		shortcut: string({

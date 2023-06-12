@@ -7,6 +7,17 @@ import analyticsRouter from "./analytics.router"
 
 const router = Router()
 
+  /**
+   * @openapi
+   * /heartbeat:
+   *  get:
+   *   description: Responds if app is active
+   *   tags:
+   *    - Healthcheck
+   *   responses:
+   *    200:
+   *     description: app is running
+   */	 
 router.get("/heartbeat", (req: Request, res: Response) => {
 	res.sendStatus(200)
 })
