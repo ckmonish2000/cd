@@ -59,10 +59,7 @@ export const revokePermissionInputSchema = object({
  *    type: string
  *    required:
  *     - shortlink
- *    properties:
- *     shortlink:
- *      type: string
- *      default: google
+ *    default: google
  */
 export const fetchAccessListForUrlInputSchema = object({
 	params: object({
