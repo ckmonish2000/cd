@@ -74,7 +74,7 @@ router.put(
 
 /**
  * @openapi
- * /api/shortcut:
+ * /api/shortcut/{shortlink}:
  *  delete:
  *   tags:
  *    - Shortcut
