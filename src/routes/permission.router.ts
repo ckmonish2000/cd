@@ -42,7 +42,7 @@ router.post(
 
 /**
  * @openapi
- * /api/permission/:accessListId:
+ * /api/permission/{accessListId}:
  *  delete:
  *   tags:
  *    - Permission
@@ -52,11 +52,12 @@ router.post(
  *   - in: path
  *     schema:
  *      $ref: '#/components/schemas/RevokePermissionSchema'
- *      name: uuid
- *      required: true
+ *     name: accessListId
+ *     required: true
+ *     default: 516782ba-63d9-43b6-b278-620c1caefd48
  *   responses:
- *    201:
- *     description: Should return new permission id
+ *    200:
+ *     description: Should return permission object
  *    404:
  *     description: User not found
  */
@@ -69,7 +70,7 @@ router.delete(
 
 /**
  * @openapi
- * /api/permission/:shortlink:
+ * /api/permission/{shortlink}:
  *  get:
  *   tags:
  *    - Permission
@@ -79,9 +80,11 @@ router.delete(
  *   - in: path
  *     schema:
  *      $ref: '#/components/schemas/AccessListForUrlSchema'
- *      required: true
+ *     required: true
+ *     name: shortlink
+ *     default: google
  *   responses:
- *    201:
+ *    200:
  *     description: Should return array of user id
  *    404:
  *     description: User not found
