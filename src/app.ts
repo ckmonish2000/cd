@@ -3,6 +3,7 @@ import config from "config"
 import createServer from "@utils/server"
 import logger from "@utils/logger"
 import swaggerDocs from "@utils/swagger"
+import { startMetricServer } from "@utils/metrics"
 
 
 const port = config.get<number>("port")
@@ -11,6 +12,7 @@ const app = createServer()
 
 app.listen(port, async () => {
   logger.info(`Express server running on port:${port}`)
-
+  
   swaggerDocs(app,port)
+  startMetricServer()
 })

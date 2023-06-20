@@ -6,7 +6,7 @@ import errorHandler from "@middleware/errorHandler"
 import cookieParser from "cookie-parser"
 import rateLimiter from "@middleware/rateLimiter"
 import cors from "cors"
-import logger from "./logger"
+import trackResponseMetrics from "@middleware/responseTimeMetric"
 
 declare module "express-session" {
 	export interface SessionData {
@@ -19,9 +19,9 @@ declare module "express-session" {
 function createServer(): Express {
 	const app = express()
 	const sessionSecret = Buffer.from(config.get("privateKey")).toString("ascii")
-	
-	app.use(cors())
 
+	app.use(cors())
+	
 	app.use(express.json())
 
 	app.use(cookieParser())
@@ -34,7 +34,12 @@ function createServer(): Express {
 		})
 	)
 
+
 	app.use(rateLimiter)
+	
+	// metrics server
+	app.use(trackResponseMetrics)
+
 	app.use(router)
 	app.use(errorHandler)
 
