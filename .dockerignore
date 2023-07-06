@@ -1,0 +1,14 @@
+# folders
+node_modules
+docker
+
+# config files
+.eslintrc.js
+.prettierignore
+.prettierrc
+.README.md
+.gitignore
+.dockerignore
+
+# editor files
+.vscode
