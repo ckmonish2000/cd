@@ -16,6 +16,7 @@ RUN npx prisma generate --schema=$PWD/src/prisma/schema.prisma
 FROM builder as dev
 
 EXPOSE 3000
+EXPOSE 9100
 
 CMD [ "yarn","dev" ]
 
