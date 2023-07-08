@@ -1,0 +1,46 @@
+version: '3.9'
+services:
+  mysql:
+    container_name: project-cd-db
+    image: mysql
+    restart: unless-stopped
+    volumes:
+      - ./datadir:/var/lib/mysql
+    networks:
+      - project-cd
+    env_file:
+      - ../.env
+
+  redis:
+    container_name: project-cd-cache
+    image: redis:alpine
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+    networks:
+      - project-cd
+    depends_on:
+      - mysql
+
+  backend:
+    container_name: project-cd-backend
+    build:
+      context: ../
+      dockerfile: dockerfile
+      target: dev
+    env_file:
+      - ../.env
+    volumes:
+      - ../src:/usr/src/app/src
+      - /usr/src/app/node_modules
+    networks:
+      - project-cd
+    depends_on:
+      - redis
+      - mysql
+    ports:
+      - 3000:3000
+      - 9100:9100
+
+networks:
+  project-cd:
