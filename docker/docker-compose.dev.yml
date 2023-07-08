@@ -10,6 +10,12 @@ services:
       - project-cd
     env_file:
       - ../.env
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 1m30s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
 
   redis:
     container_name: project-cd-cache
@@ -20,7 +26,8 @@ services:
     networks:
       - project-cd
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
 
   backend:
     container_name: project-cd-backend
@@ -36,8 +43,10 @@ services:
     networks:
       - project-cd
     depends_on:
-      - redis
-      - mysql
+      mysql:
+        condition: service_healthy
+
+    command: sh -c "yarn prisma migrate dev --schema=./src/prisma/schema.prisma --name init && yarn dev"
     ports:
       - 3000:3000
       - 9100:9100
