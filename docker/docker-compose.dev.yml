@@ -45,6 +45,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+      redis:
+        condition: service_started
 
     command: sh -c "yarn prisma migrate dev --schema=./src/prisma/schema.prisma --name init && yarn dev"
     ports:
